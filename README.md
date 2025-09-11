@@ -1,9 +1,9 @@
 # API-fetching-and-storing-in-PostgreSQL-with-Task-Scheduler (Personal Project) 
 
-Task Purpose: Fetching OpenWeather API every 15 min and then store in PostgreSQL with Task Scheduler_Batch Processing
+**Task Purpose**: Fetching OpenWeather API every 15 min and then store in PostgreSQL with Task Scheduler_Batch Processing
 Output: Data Table in PostgreSQL and Excel as well
 
-1st Step, I created a table in PostgreSQL to store the data from the OpenWeather API. You can see the SQL codes in the file named "OpenWeather.sql". 
+**1st Step**, I created a table in PostgreSQL to store the data from the OpenWeather API. You can see the SQL codes in the file named "OpenWeather.sql". 
 
 Table name is weather_readings. 
 
@@ -11,15 +11,15 @@ There are six columns; id, temperature, humidity, wind_speed and timestamp. I de
 
 In that file, you will see these two SQL lines:
 
-GRANT INSERT ON TABLE weather_readings TO tle;
+**GRANT INSERT ON TABLE weather_readings TO tle;
 
-GRANT USAGE, SELECT ON SEQUENCE weather_readings_id_seq TO tle;
+GRANT USAGE, SELECT ON SEQUENCE weather_readings_id_seq TO tle;** 
 
 The first line is granting(which is allowing) user "tle" to insert data into table weather_readings and the second one is granting to use the sequence object which makes unique values and is auto-created if we use the SERIAL datatype. "SELECT" is to be able to see the current value. We used that data type on id column but for that specific data type has its own permission. Therefore, we have to use grant line to be able to use it. 
 
 Then we run the SQL, like building a home first, then we will move the furniture into it. 
 
-2nd Step, I created a text file in VS code with the name of .env which contains:
+**2nd Step**, I created a text file in VS code with the name of .env which contains:
 
 DB_USER=tle
 
