@@ -80,4 +80,4 @@ Then next line;
   
 **});**
 
-These lines are meant to add database connection detials, earlier; require('dotenv').config(); added env variables to process.env but it is just a list type, here, we assign to dbClient a new object contains key-value database connection details. So, we can connect to PostgreSQL. 
+These lines are meant to add database connection detials, earlier; **require('dotenv').config();** added env variables to process.env but it is just a list type, here, we assign to dbClient a new object contains key-value database connection details. So, we can connect to PostgreSQL. 
