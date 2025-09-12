@@ -1,7 +1,8 @@
 # API-fetching-and-storing-in-PostgreSQL-with-Task-Scheduler (Personal Project) 
 
-**Task Purpose**: Fetching OpenWeather API every 15 min and then store in PostgreSQL with Task Scheduler_Batch Processing
-Output: Data Table in PostgreSQL and Excel as well
+**Task Purpose**: Automate Fetching OpenWeather API every 15 min. Then, store the data in PostgreSQL database and Excel 
+
+**Output**: Data Table in PostgreSQL and Excel 
 
 **1st Step**, I created a table in PostgreSQL to store the data from the OpenWeather API. You can see the SQL codes in the file named "OpenWeather.sql". 
 
@@ -81,3 +82,78 @@ Then next line;
 **});**
 
 These lines are meant to add database connection detials, earlier; **require('dotenv').config();** added env variables to process.env but it is just a list type, here, we assign to dbClient a new object contains key-value database connection details. So, we can connect to PostgreSQL. 
+
+Till this part is only importing libraries and assigning variables.
+
+Next part contains the main function of ETL which is **async function fetchDataAndStore() {....}.**
+
+There, I use **async function()** and **await function** to stop blocking, without them, the system will block at the time taking task like api fetching and connecting to database which can make system to look like it stops or frozen. So, with them, we are telling the program to **await** for the time consuming task to finish, then at that time, **async function()** declares that this function is non-blocking function so that status allows the system to do the rest tasks while awaiting.
+
+So, there, first, I declare asyn function, in there I do try and catch to prevent unncessary errors. In the try block, I wrote these two lines:
+
+**const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${CITY_NAME}&appid=${API_KEY}&units=metric`);**
+
+**const weatherData = response.data;** 
+
+**This is the part of Extracting API data.**
+
+The first line is trying to send HTTP Get request to get data by using axios.get() function which contains URL address, specific city and API key. There, you will notice i use await function since this can take time so I am telling program to wait for this task to finish but also allows it to do other tasks if it needs to do. 
+
+Then I assign the fetched data to fixed variable **response**. In the next line, I flitered only necessary data from the response, **response.data** then assigned to the fixed variable **weatherData** so we can transform the data easily later. 
+
+Now, it is time for **preparing fetched data or transforming**.
+
+**const cityName = weatherData.name;**
+
+**const temperature = weatherData.main.temp;**
+
+**const humidity = weatherData.main.humidity;**
+
+**const windSpeed = weatherData.wind.speed;**
+
+**const timestamp = new Date();**
+
+Those lines are assigining fixed variables to specific fetched data. The format of flitering is checked from the OpenWeatherMap.Org API document. 
+https://openweathermap.org/current#example_JSON
+There, you will notice that timestamp is assigned as new Data() because we want the unique time when the data is fetched. 
+
+**Then, Loading Step**.  
+
+ **await dbClient.connect();** This line is to **connect** with the database. Here, I also use **await function** since this can take time so tell the program to wait for this task finish but also allow it to do other tasks at that time. 
+
+After that we will now **load** into the database. 
+
+**const insertQuery =**
+     **INSERT INTO weather_readings (city_name, temperature, humidity, wind_speed, timestamp)
+      VALUES ($1, $2, $3, $4, $5);**
+    `; This line is assiginign fixed variable to SQL command instruction how to insert data.  VALUES ($1, $2, $3, $4, $5) line is for the placeholder how we tell the data which place they will be placed. 
+    
+   **const values = [cityName, temperature, humidity, windSpeed, timestamp];**   This line holds the values
+    
+   **await dbClient.query(insertQuery, values);** Now, we combine those two variables and do loading. 
+
+   **console.log(`Successfully inserted weather data for ${cityName}.`);
+  }** This is a simple print line to see whether it is succeed or not. 
+
+  Now in the **catch()** function we catch any error and then print with error massage. 
+
+  **catch (error) {
+    console.error('An error occurred:', error.message);
+  }**
+  Then, in the **finally** block, **await dbClient.end();**  to close the database connection everytime after fetching.
+   The last line, **fetchDataAndStore();** is to call that function and run it. 
+
+   Now, we finish ETL coding with Node.js and PostgreSQL. 
+
+   For the **Automating Part**, I use **Window Task Scheduler** and set the program to fetch every 15 min. 
+  
+<img width="1919" height="658" alt="Screenshot 2025-09-03 233742" src="https://github.com/user-attachments/assets/5fad5bef-bb02-4954-ae18-7cfde45cfe4e" />
+
+Here, you can see it **0x0** in the **Last Run Time** meaning it fetched successfully. 
+<img width="1919" height="671" alt="Screenshot 2025-09-04 024729" src="https://github.com/user-attachments/assets/b6cd6ae1-338a-47e9-b931-e0192f028b29" />
+In this screenshot, you can see **Event ID 102** meaning the task finished successfully. Now we get fetched every 15 min data in the database. 
+
+I also want to get a CSV file output so I connect the program with **Excel** as well. 
+For that, first, I installed some libraries and imported them. For the code reference, you can check at **"pg_to_excel.py"**. 
+
+
