@@ -153,6 +153,10 @@ Here, you can see it **0x0** in the **Last Run Time** meaning it fetched success
 <img width="1919" height="671" alt="Screenshot 2025-09-04 024729" src="https://github.com/user-attachments/assets/b6cd6ae1-338a-47e9-b931-e0192f028b29" />
 In this screenshot, you can see **Event ID 102** meaning the task finished successfully. Now we get stored, fetched data for every 15 min in the database. 
 
+This is what it looks like in the database output.
+
+<img width="976" height="729" alt="Screenshot 2025-09-13 224431" src="https://github.com/user-attachments/assets/46ea14c6-7052-4407-b896-9a44c180d614" />
+
 I also want to get a CSV file output so I connect the program with **Excel** as well. 
 For that, first, I installed some libraries and imported them. For the code reference, you can check at **"pg_to_excel.py"**. 
 
