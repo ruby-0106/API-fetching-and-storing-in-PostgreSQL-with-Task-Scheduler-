@@ -1,4 +1,4 @@
-# API-fetching-and-storing-in-PostgreSQL-with-Task-Scheduler (Personal Project) 
+# API-fetching-and-storing-in-PostgreSQL-with-Task-Scheduler (Individual Project) 
 
 **Task Purpose**: Automate Fetching OpenWeather API every 15 min. Then, store the data in PostgreSQL database and Excel 
 
