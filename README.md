@@ -151,9 +151,41 @@ After that we will now **load** into the database.
 
 Here, you can see it **0x0** in the **Last Run Time** meaning it fetched successfully. 
 <img width="1919" height="671" alt="Screenshot 2025-09-04 024729" src="https://github.com/user-attachments/assets/b6cd6ae1-338a-47e9-b931-e0192f028b29" />
-In this screenshot, you can see **Event ID 102** meaning the task finished successfully. Now we get fetched every 15 min data in the database. 
+In this screenshot, you can see **Event ID 102** meaning the task finished successfully. Now we get stored, fetched data for every 15 min in the database. 
 
 I also want to get a CSV file output so I connect the program with **Excel** as well. 
 For that, first, I installed some libraries and imported them. For the code reference, you can check at **"pg_to_excel.py"**. 
+
+**1/** First, let me explain the purpose of this file,**"pg_to_excel.py"**.
+
+**2/** Our goal is to get an Excel file which contains the fetched data but the data are now stored in the PostgreSQL Database.
+
+**3/** Currently, we are working on the VS Code, so in there we will connect database first and then in there, we will search the table we want which is **weather_readings**.
+
+**4/** Then we will load that data to a dataframe using pandas and then export into an excel file. 
+
+In the code file, the first two lines are importing libraires:
+**import psycopg2** , this library can help to connect between python and postgreSQL. 
+
+**import pandas as pd**, pandas is known for data manipulation and I used to connect with excel. 
+
+Then, I worte a dictionary for the database connection details and SQL line to search the specific table. 
+
+Next, is the try...except...finally block. In the try block, I will wrote codes that I have to run, except is for error handling and finally is to close the database connection so we can save server loading. 
+
+So, in the try block, I assign a variable named "conn" to **psycopg2.connect**(**connection_details)**, the purpose is to connect with database, **connection_details** is the dictionary I created which contains key-value pairs and ** role is to unpack those key-value pairs to individual keyword arguments which that function accepts. 
+
+Now, we connected that database, next step, is we have to find the specific table that we want. 
+**df = pd.read_sql(sql_query, conn)** what this line does is simple. **conn** is the established connection we just did, it tells the function where the database is, and **sql_query** is to find the table. So, this function is to read data from the specific table of specific database and then, load it to the data frame(df).
+
+Now, with the help of pandas, we export to the excel:
+**df.to_excel("output_file.xlsx", index=False)**, index=False role is to exclude index from the dataframe which starts from 0. 
+
+Then, like I earlier mentioned, **except** is to catch any error, here I used operational error of database and then with **finally**, we close the database connection. 
+
+That's all for my work flow of this project, "fetching API data every 15min and process of storing in PostgreSQL database and Excel". 
+
+Thank You!!😊
+
 
 
