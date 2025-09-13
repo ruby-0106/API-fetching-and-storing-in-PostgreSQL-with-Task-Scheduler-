@@ -187,6 +187,10 @@ Now, with the help of pandas, we export to the excel:
 
 Then, like I earlier mentioned, **except** is to catch any error, here I used operational error of database and then with **finally**, we close the database connection. 
 
+And, this is what it looks like in the Excel.
+<img width="617" height="597" alt="Screenshot 2025-09-13 224626" src="https://github.com/user-attachments/assets/a7ab8481-e188-4dda-b4ec-712e92e82c8b" />
+
+
 That's all for my work flow of this project, "fetching API data every 15min and process of storing in PostgreSQL database and Excel". 
 
 Thank You!!😊
